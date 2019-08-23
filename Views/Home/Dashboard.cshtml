@@ -1,0 +1,78 @@
+@using BeltExam.Models
+@model HangoutUserViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Belt Exam Dashboard</title>
+    <link rel="stylesheet" href="~/css/Dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <h1>Dojo Activity Center</h1>
+            <p class="welcome">Welcome, @Model.User.FirstName!</p>
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+        </nav>
+        <table class="table">
+            <thead>
+                <th>Activity</th>
+                <th>Date and Time</th>
+                <th>Duration</th>
+                <th>Event Coordinator</th>
+                <th>No. of Participants</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+                @foreach (var hangout in Model.Hangouts)
+                {
+                    <tr>
+                        <td><a href="/activity/@hangout.HangoutId">@hangout.Title</a></td>
+                        <td>@Convert.ToDateTime(hangout.Date).ToString("MM/dd/yyyy") at @Convert.ToDateTime(hangout.Time).ToString("h:mm tt")</td>
+                        <td>@hangout.Duration @hangout.DurationType</td>
+                        <td>@hangout.Creator.FirstName</td>
+                        <td>@hangout.HangoutParticipants.Count</td>
+                        <td>
+                            @if (hangout.CreatorId == Model.User.UserId)
+                            {
+                                <a asp-action="Delete" asp-route-hangoutId="@hangout.HangoutId" asp-controller="Home">Delete</a>
+                            }
+                            else
+                            {
+                                @if (hangout.HangoutParticipants.Count > 0)
+                                {
+                                    @if (hangout.HangoutParticipants.Any(h => h.Participant.UserId == Model.User.UserId))
+                                    {
+                                        <a asp-action="Leave" asp-route-hangoutId="@hangout.HangoutId" asp-controller="Home">Leave</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Join" asp-route-hangoutId="@hangout.HangoutId" asp-controller="Home">Join</a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a asp-action="Join" asp-route-hangoutId="@hangout.HangoutId" asp-controller="Home">Join</a>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a href="/new" class="btn btn-primary">Add New Activity</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+@using BeltExam.Models
+@model HangoutUserViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Belt Exam New</title>
+    <link rel="stylesheet" href="~/css/New.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <h1>Dojo Activity Center</h1>
+            <ul id="nav" class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+        </nav>
+        <h4>Create an Activity</h4>
+        <form asp-action="CreateHangout" asp-controller="Home" method="post">
+            <label asp-for="Hangout.Title"></label>
+            <input type="text" asp-for="Hangout.Title" class="form-control">
+            <span class="text-danger" asp-validation-for="Hangout.Title"></span><br>
+            <label asp-for="Hangout.Date"></label>
+            <input class="form-control" type="date" asp-for="Hangout.Date">
+            <span class="text-danger" asp-validation-for="Hangout.Date"></span><br>
+            <label asp-for="Hangout.Time"></label>
+            <input class="form-control" type="time" asp-for="Hangout.Time">
+            <span class="text-danger" asp-validation-for="Hangout.Time"></span><br>
+            <label asp-for="Hangout.Duration"></label>
+            <div class="duration">
+                <input class="form-control inline duration-input" type="text" asp-for="Hangout.Duration">
+                <select class="inline form-control" asp-for="Hangout.DurationType" id="duration-type">
+                    <option value="Minutes">Minutes</option>
+                    <option value="Hours">Hours</option>
+                    <option value="Days">Days</option>
+                </select>
+                <span class="text-danger" asp-validation-for="Hangout.Duration"></span><br>
+            </div>
+            <label asp-for="Hangout.Description"></label>
+            <textarea asp-for="Hangout.Description" cols="5" rows="3" class="form-control"></textarea>
+            <span class="text-danger" asp-validation-for="Hangout.Description"></span><br>
+            <button class="btn btn-primary">Create Activity</button>
+        </form>
+    </div>
+</body>
+</html>
